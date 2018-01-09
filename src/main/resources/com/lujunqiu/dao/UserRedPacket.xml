@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.lujunqiu.dao">
+<mapper namespace="com.lujunqiu.dao.UserRedPacketDao">
     <!--插入抢红包信息,将MySQL自动生成的主键，并回填给输入的UserRedPacket对象的id属性中-->
     <insert id="grapRedPacket" useGeneratedKeys="true" keyProperty="id" parameterType="com.lujunqiu.pojo.UserRedPacket">
         INSERT INTO  T_USER_RED_PACKET(red_packet_id,user_id,amount,grab_time,note) VALUES

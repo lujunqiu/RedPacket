@@ -12,7 +12,7 @@ public class UserRedPacket implements Serializable {
     /**编号*/
     private int id;
     /**红包编号*/
-    private int redPackerId;
+    private int redPacketId;
     /**抢红包用户编号*/
     private int userId;
     /**抢红包金额*/
@@ -30,12 +30,12 @@ public class UserRedPacket implements Serializable {
         this.id = id;
     }
 
-    public int getRedPackerId() {
-        return redPackerId;
+    public int getRedPacketId() {
+        return redPacketId;
     }
 
-    public void setRedPackerId(int redPackerId) {
-        this.redPackerId = redPackerId;
+    public void setRedPacketId(int redPacketId) {
+        this.redPacketId = redPacketId;
     }
 
     public int getUserId() {

@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+
 /**
  * @author qiu
  */
@@ -28,15 +30,20 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
     public int grapRedPacket(int redPacketId, int userId) {
         RedPacket redPacket = redPacketDao.getRedPacket(redPacketId);
 
+        System.out.println(redPacket.getStock()+"dsf"+redPacket.getUnitAmount());
         //当前红包库存大于0
         if (redPacket.getStock() > 0) {
             redPacketDao.decreaseRedPacket(redPacketId);
 
             UserRedPacket userRedPacket = new UserRedPacket();
-            userRedPacket.setRedPackerId(redPacketId);
+            userRedPacket.setRedPacketId(redPacketId);
+
             userRedPacket.setUserId(userId);
+
             userRedPacket.setAmount(redPacket.getUnitAmount());
+
             userRedPacket.setNote("抢红包 " + redPacketId);
+
 
             int result = userRedPacketDao.grapRedPacket(userRedPacket);
             return result;

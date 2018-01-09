@@ -1,5 +1,8 @@
 <html>
+<head>
+    <meta charset="UTF-8"/>
+</head>
 <body>
-<h2>高并发抢红包业务</h2>
+<h2>RedPacket</h2>
 </body>
 </html>

@@ -24,10 +24,14 @@ public class UserRedPacketController {
     @ResponseBody
     public Map<String,Object> grapRedPacket(int redPacketId ,int userId) {
         int result = userRedPacketService.grapRedPacket(redPacketId, userId);
+        System.out.println(result+"dsafasdfasd");
         Map<String, Object> resultMap = new HashMap<String, Object>();
         boolean flag = result > 0;
+        System.out.println("Re");
         resultMap.put("success", flag);
         resultMap.put("message", flag ? "抢红包成功" : "抢红包失败");
         return resultMap;
     }
+
+
 }
