@@ -6,8 +6,19 @@
         SELECT id,user_id as userId,amount,send_date as sendDate,total,unit_amount as unitAmount,stock,version,note from T_RED_PACKET where id = #{id}
     </select>
 
+    <!--SQL语句加悲观锁,属于行更新锁-->
+    <select id="getRedPacketForUpdate" parameterType="int" resultType="com.lujunqiu.pojo.RedPacket">
+        SELECT id,user_id as userId,amount,send_date as sendDate,total,unit_amount as unitAmount,stock,version,note from T_RED_PACKET where id = #{id} for UPDATE
+    </select>
+
     <!--扣减红包库存-->
     <update id="decreaseRedPacket">
         UPDATE T_RED_PACKET set stock = stock - 1 where id = #{id}
     </update>
+
+    <!--CAS扣减红包库存-->
+    <update id="decreaseRedPacketForVersion">
+        update T_RED_PACKET set stock = stock - 1,version = version + 1  where id = #{id} and version = #{version};
+    </update>
+
 </mapper>

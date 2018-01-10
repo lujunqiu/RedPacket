@@ -11,4 +11,12 @@ public interface UserRedPacketService {
      * @return 影响记录条数
      */
     int grapRedPacket(int redPacketId, int userId);
+
+    /**
+     * CAS实现抢红包
+     * @param redPacketId
+     * @param userId
+     * @return
+     */
+    int grapRedPacketForVersion(int redPacketId, int userId);
 }

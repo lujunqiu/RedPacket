@@ -21,7 +21,7 @@
                 $.post({
                     //请求抢id为1的红包
                     url:
-                    "./userRedPacket/grapRedPacket?redPacketId=2&userId="+i,
+                    "./userRedPacket/grapRedPacketForVersion?redPacketId=3&userId="+i,
                     success: function (result) {
                     }
                 });
