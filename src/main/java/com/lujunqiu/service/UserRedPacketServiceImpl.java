@@ -5,6 +5,7 @@ import com.lujunqiu.dao.UserRedPacketDao;
 import com.lujunqiu.pojo.RedPacket;
 import com.lujunqiu.pojo.UserRedPacket;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,7 +20,13 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
     private UserRedPacketDao userRedPacketDao = null;
     @Autowired
     private RedPacketDao redPacketDao = null;
+    @Autowired
+    private RedisTemplate redisTemplate = null;
+    @Autowired
+    private RedisRedPacketService redisRedPacketService = null;
 
+    //Lua脚本,在redis中是原子操作
+    String script = "";
     /**
      * 抢红包失败
      */
@@ -91,6 +98,11 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
             }
         }
         return FAILED;
+    }
+
+    @Override
+    public int grapRedPacketByRedis(int redPacketId, int userId) {
+        return 0;
     }
 }
 

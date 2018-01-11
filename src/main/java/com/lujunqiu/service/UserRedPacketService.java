@@ -19,4 +19,15 @@ public interface UserRedPacketService {
      * @return
      */
     int grapRedPacketForVersion(int redPacketId, int userId);
+
+    /**
+     * 通过redis实现抢红包
+     * @param redPacketId
+     * @param userId
+     * @return
+     * 0-没有库存，失败
+     * 1-成功抢到红包，且不是最后一个红包
+     * 2-成功抢到红包，且是最后一个红包
+     */
+    int grapRedPacketByRedis(int redPacketId, int userId);
 }
