@@ -33,13 +33,18 @@ public class RedisRedPacketServiceImpl implements RedisRedPacketService {
     @Autowired
     DataSource dataSource = null;
 
+    /**
+     * 将redis缓存中的抢红包数据保存到Mysql中.
+     * @param redPacketId
+     * @param unitAmount
+     */
     @Override
     //异步调用
     @Async
     public void saveUserRedPacketByRedis(int redPacketId, double unitAmount) {
-        System.out.println("开始保持数据");
         long start = System.currentTimeMillis();
         //得到操控redis列表的对象,操作的列表的key是"PREFIX + redPacketId"
+        System.out.println(PREFIX + redPacketId);
         BoundListOperations ops = redisTemplate.boundListOps(PREFIX + redPacketId);
 
         long size = ops.size();
@@ -48,9 +53,9 @@ public class RedisRedPacketServiceImpl implements RedisRedPacketService {
         List<UserRedPacket> userRedPacketList = new ArrayList<UserRedPacket>(TIME_SIZE);
 
         for (int i = 0; i < times; i++) {
-            List userIdList = null;
+            List<String> userIdList = null;
             if (i == 0) {
-                userIdList = ops.range(0, TIME_SIZE);
+                userIdList = ops.range(i * TIME_SIZE, (i + 1) * TIME_SIZE);
             } else {
                 userIdList = ops.range(i * TIME_SIZE + 1, (i + 1) * TIME_SIZE);
             }
@@ -91,6 +96,7 @@ public class RedisRedPacketServiceImpl implements RedisRedPacketService {
         int[] count = null;
 
         try {
+
             conn = dataSource.getConnection();
             //取消自动提交事务，手动提交事务
             conn.setAutoCommit(false);

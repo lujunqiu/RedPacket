@@ -29,5 +29,5 @@ public interface UserRedPacketService {
      * 1-成功抢到红包，且不是最后一个红包
      * 2-成功抢到红包，且是最后一个红包
      */
-    int grapRedPacketByRedis(int redPacketId, int userId);
+    long grapRedPacketByRedis(int redPacketId, int userId);
 }

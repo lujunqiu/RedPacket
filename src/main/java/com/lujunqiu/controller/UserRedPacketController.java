@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,5 +55,20 @@ public class UserRedPacketController {
         return resultMap;
     }
 
-
+    /**
+     * Redis抢红包实现
+     * @param redPacketId
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/grapRedPacketByRedis")
+    @ResponseBody
+    public Map<String, Object> grapRedPacketByRedis(int redPacketId, int userId) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        long result = userRedPacketService.grapRedPacketByRedis(redPacketId, userId);
+        boolean flag = result > 0;
+        resultMap.put("result", flag);
+        resultMap.put("message", flag ? "抢红包成功" : "抢红包失败");
+        return resultMap;
+    }
 }
