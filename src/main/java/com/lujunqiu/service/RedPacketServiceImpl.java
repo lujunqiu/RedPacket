@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  *
  * @author qiu
@@ -30,4 +32,15 @@ public class RedPacketServiceImpl implements RedPacketService {
         return redPacketDao.decreaseRedPacket(id);
     }
 
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    public List<RedPacket> getRedPackets() {
+        return redPacketDao.getRedPackets();
+    }
+
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    public void insertRedPacket(RedPacket redPacket) {
+        redPacketDao.insertRedPacket(redPacket);
+    }
 }

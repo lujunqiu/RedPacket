@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lujunqiu.dao.RedPacketDao">
-    <!-- 查询红包的具体信息 -->
+    <!-- 根据id查询红包的具体信息 -->
     <select id="getRedPacket" parameterType="int" resultType="com.lujunqiu.pojo.RedPacket">
         SELECT id,user_id as userId,amount,send_date as sendDate,total,unit_amount as unitAmount,stock,version,note from T_RED_PACKET where id = #{id}
     </select>
 
+    <!--查询所有红包信息-->
+    <select id="getRedPackets" resultType="com.lujunqiu.pojo.RedPacket">
+        SELECT id,user_id as userId,amount,send_date as sendDate,total,unit_amount as unitAmount,stock,version,note from T_RED_PACKET
+    </select>
     <!--SQL语句加悲观锁,属于行更新锁-->
     <select id="getRedPacketForUpdate" parameterType="int" resultType="com.lujunqiu.pojo.RedPacket">
         SELECT id,user_id as userId,amount,send_date as sendDate,total,unit_amount as unitAmount,stock,version,note from T_RED_PACKET where id = #{id} for UPDATE
     </select>
 
+    <!--插入红包信息,id主键回填-->
+    <insert id="insertRedPacket" useGeneratedKeys="true" keyProperty="id" parameterType="com.lujunqiu.pojo.RedPacket">
+        INSERT INTO T_RED_PACKET(user_id, amount, total, unit_amount, stock, note) VALUES (#{userId},#{amount},#{total},#{unitAmount},#{stock},#{note})
+    </insert>
     <!--扣减红包库存-->
     <update id="decreaseRedPacket">
         UPDATE T_RED_PACKET set stock = stock - 1 where id = #{id}
