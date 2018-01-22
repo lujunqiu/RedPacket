@@ -10,9 +10,16 @@ import com.lujunqiu.service.SendSmsService;
 import com.lujunqiu.service.UserRedPacketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
@@ -22,11 +29,15 @@ import java.util.List;
  */
 @Controller
 @RequestMapping(value = "/test")
+@SessionAttributes(names = "codeS")
 public class Test {
     @Autowired
     RedPacketService redPacketService = null;
     @Autowired
     UserRedPacketService userRedPacketService = null;
+    @Autowired
+    SendSmsService sendSmsService = null;
+
     @RequestMapping(value = "/hello")
     @ResponseBody
     public RedPacket fun(){
@@ -40,14 +51,35 @@ public class Test {
         return redPacket;
     }
 
-    /**
-     * 测试短信验证功能
-     * @param args
-     * @throws ClientException
-     * @throws InterruptedException
+    @RequestMapping(value = "/message",method = RequestMethod.POST)
+    public String fun1(String phone, Model model) throws ClientException, InterruptedException {
+        String code = sendSmsService.randomNum();
+        QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(phone, code);
+        model.addAttribute("codeS", code);
+        System.out.println(code);
+        return "redirect:/code";
+    }
+    @RequestMapping(value = "/validator")
+    @ResponseBody
+    public boolean fun2(String code , HttpSession httpSession){
+        return code.equals(httpSession.getAttribute("codeS"));
+    }
+
+    /*
+    测试ajax
      */
-    public static void main(String[] args) throws ClientException, InterruptedException {
-        QuerySendDetailsResponse querySendDetailsResponse = SendSmsService.sendCode("13212778355");
-        System.out.println(querySendDetailsResponse.getSmsSendDetailDTOs().get(0).getContent());
+    @RequestMapping(value = "/sms")
+    public String toAjax(){
+        return "sms";
+    }
+    @RequestMapping(value = "/ajax")
+    public void ajax(String name, HttpServletResponse response) {
+        String result = "hello " + name;
+        System.out.println(result);
+        try {
+            response.getWriter().write(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
