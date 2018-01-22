@@ -6,4 +6,8 @@
         INSERT INTO  T_USER_RED_PACKET(red_packet_id,user_id,amount,grab_time,note) VALUES
         (#{redPacketId},#{userId},#{amount},now(),#{note})
     </insert>
+
+    <select id="getUserRedPacket" resultType="com.lujunqiu.pojo.UserRedPacket">
+        SELECT id,red_packet_id AS redPacketId,user_id AS userId,amount,grab_time AS grabTime,note FROM T_USER_RED_PACKET
+    </select>
 </mapper>

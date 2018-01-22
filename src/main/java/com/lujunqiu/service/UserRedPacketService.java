@@ -1,5 +1,9 @@
 package com.lujunqiu.service;
 
+import com.lujunqiu.pojo.UserRedPacket;
+
+import java.util.List;
+
 /**
  * Created by qiu on 18-1-8.
  */
@@ -30,4 +34,10 @@ public interface UserRedPacketService {
      * 2-成功抢到红包，且是最后一个红包
      */
     long grapRedPacketByRedis(int redPacketId, int userId);
+
+    /**
+     * 得到用户抢红包信息
+     * @return
+     */
+    List<UserRedPacket> getUserRedPacket();
 }

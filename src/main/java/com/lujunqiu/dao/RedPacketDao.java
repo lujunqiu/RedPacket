@@ -52,6 +52,7 @@ public interface RedPacketDao {
     /**
      * CAS操作扣减红包库存，利用版本号version避免ABA问题
      * @param id
+     * @param version
      * @return
      */
     int decreaseRedPacketForVersion(@Param("id") int id,@Param("version") long version);

@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import redis.clients.jedis.Jedis;
 
+import java.util.List;
+
 /**
  * @author qiu
  */
@@ -135,7 +137,6 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
             if (result == 2) {
                 String unitAmountStr = jedis.hget("red_packet_" + redPacketId, "unit_amount");
                 double unitAmount = Double.parseDouble(unitAmountStr);
-                System.out.println("thread_name =  " + Thread.currentThread().getName());
                 redisRedPacketService.saveUserRedPacketByRedis(redPacketId, unitAmount);
             }
         }
@@ -145,6 +146,16 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
             }
         }
         return result;
+    }
+
+    /**
+     * 得到用户抢红包信息
+     * @return
+     */
+    @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    public List<UserRedPacket> getUserRedPacket() {
+        return userRedPacketDao.getUserRedPacket();
     }
 }
 
