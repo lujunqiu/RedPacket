@@ -51,7 +51,7 @@ public class Test {
         return redPacket;
     }
 
-    @RequestMapping(value = "hello2")
+    @RequestMapping(value = "hello2",method = RequestMethod.GET)
     public String test() {
         return "getCode";
     }
@@ -61,9 +61,14 @@ public class Test {
         String code = sendSmsService.randomNum();
         QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(phone, code);
         model.addAttribute("codeS", code);
+        return "redirect:validator";
+    }
+
+    @RequestMapping(value = "/validator",method = RequestMethod.GET)
+    public String getValidator() {
         return "validator";
     }
-    @RequestMapping(value = "/validator")
+    @RequestMapping(value = "/validator",method = RequestMethod.POST)
     @ResponseBody
     public boolean fun2(String code , HttpSession httpSession){
         return code.equals(httpSession.getAttribute("codeS"));
