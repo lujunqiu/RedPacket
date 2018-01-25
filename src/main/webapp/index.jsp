@@ -9,7 +9,6 @@
  <form action="/test/message" method="post">
      <input type="text" name="phone"/><button id="bt01">get</button>
  </form>
-
  <form action="/test/validator" method="post">
      <input type="text" name="code"/><button>submit</button>
  </form>

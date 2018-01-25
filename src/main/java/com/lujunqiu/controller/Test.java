@@ -51,13 +51,17 @@ public class Test {
         return redPacket;
     }
 
+    @RequestMapping(value = "hello2")
+    public String test() {
+        return "getCode";
+    }
+
     @RequestMapping(value = "/message",method = RequestMethod.POST)
     public String fun1(String phone, Model model) throws ClientException, InterruptedException {
         String code = sendSmsService.randomNum();
         QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(phone, code);
         model.addAttribute("codeS", code);
-        System.out.println(code);
-        return "redirect:/code";
+        return "validator";
     }
     @RequestMapping(value = "/validator")
     @ResponseBody
