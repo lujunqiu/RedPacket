@@ -141,7 +141,7 @@ public class WeatherService {
 
             Result result = JSON.parseObject(demo.getJson(url), Result.class);
 
-            System.out.println(result.getResults().get(0).getDaily().get(0).getHigh());
+            System.out.println(result.getResults().get(0).getDaily().get(0).getText_day());
         } catch (Exception e) {
             System.out.println("Exception:" + e);
         }

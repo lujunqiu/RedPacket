@@ -137,6 +137,12 @@
       <version>1.2.44</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.webjars.bower/jquery -->
+    <dependency>
+      <groupId>org.webjars.bower</groupId>
+      <artifactId>jquery</artifactId>
+      <version>3.2.1</version>
+    </dependency>
 
 
   </dependencies>

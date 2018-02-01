@@ -1,11 +1,14 @@
 package com.lujunqiu.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.exceptions.ClientException;
+import com.lujunqiu.pojo.AjaxResponseMsg;
 import com.lujunqiu.pojo.RedPacket;
 import com.lujunqiu.pojo.UserRedPacket;
 import com.lujunqiu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,18 +42,6 @@ public class Test {
     @Autowired
     WeatherService weatherService = null;
 
-    @RequestMapping(value = "/hello")
-    @ResponseBody
-    public RedPacket fun() {
-        RedPacket redPacket = new RedPacket();
-        redPacket.setUserId(1);
-        redPacket.setTotal(20000);
-        redPacket.setNote("da");
-        redPacket.setStock(200000);
-        redPacket.setUnitAmount(10);
-        redPacketService.insertRedPacket(redPacket);
-        return redPacket;
-    }
 
     @RequestMapping(value = "hello2", method = RequestMethod.GET)
     public String test() {
@@ -73,45 +64,56 @@ public class Test {
     @RequestMapping(value = "/validator", method = RequestMethod.POST)
     @ResponseBody
     public boolean fun2(String code, HttpSession httpSession) {
+
         return code.equals(httpSession.getAttribute("codeS"));
     }
 
+
     /*
-    测试ajax
+    ajax的登录界面
      */
-    @RequestMapping(value = "/sms")
-    public String toAjax() {
-        return "sms";
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
     }
 
-    @RequestMapping(value = "/ajax")
-    public void ajax(String name, HttpServletResponse response) {
-        String result = "hello " + name;
-        System.out.println(result);
-        try {
-            response.getWriter().write(result);
-        } catch (IOException e) {
-            e.printStackTrace();
+    @RequestMapping(value = "/getcode.do",method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxResponseMsg Sms(String mobile , HttpServletRequest request) throws ClientException, InterruptedException{
+//        String code = sendSmsService.randomNum();
+//        QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(mobile, code);
+        AjaxResponseMsg responseMsg = new AjaxResponseMsg();
+//        if (querySendDetailsResponse.getCode().equals("OK")) {
+//            responseMsg.setErrcode(0);
+//            responseMsg.setDetail("60");
+//        } else {
+//            responseMsg.setErrcode(1);
+//        }
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(600);
+        session.setAttribute("code","AAAA");
+        System.out.println("getCode.do"+"AAAA");
+        return responseMsg;
+    }
+
+
+    @RequestMapping(value = "/validate.do", method = RequestMethod.GET)
+    @ResponseBody
+    public AjaxResponseMsg validate(String mobile , String idcode , HttpServletRequest request) {
+        AjaxResponseMsg responseMsg = new AjaxResponseMsg();
+        String code = (String) request.getSession().getAttribute("code");
+        System.out.println("validate:"+mobile);
+        System.out.println("validate:"+idcode);
+        System.out.println(code.equals(idcode));
+        if (code.equals(idcode)) {
+            responseMsg.setErrcode(0);
+        } else {
+            responseMsg.setErrcode(1);
+            responseMsg.setDetail("验证码错误");
         }
+        return responseMsg;
     }
 
-/*
-测试转发与重定向
- */
 
-    @RequestMapping(value="/a", method=RequestMethod.GET)
-    public String inputData(){
-        return "a"; //Spring框架找到对应的View并渲染
-    }
-    @RequestMapping(value="/a", method=RequestMethod.POST)
-    public String outputData(HttpSession session, String name){
-        session.setAttribute("name", weatherService.getWeatherInfo(name,1));
-        //转发到 /b 的Controller方法(即outputDataX)上
-        return "redirect:/test/b";
-    }
-    @RequestMapping(value="/b", method=RequestMethod.GET)
-    public String outputDataX(){
-        return "b";
-    }
 
 }
