@@ -51,7 +51,7 @@ public class SendSmsService {
         //必填:短信签名-可在短信控制台中找到
         request.setSignName("卢军球");
         //必填:短信模板-可在短信控制台中找到
-        request.setTemplateCode("SMS_122282258");
+        request.setTemplateCode("SMS_123796813");
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
 //        request.setTemplateParam("{\"code\":\"gggg\"}");
         request.setTemplateParam("{\"code\":" + "\""+ code + "\"" + "}");

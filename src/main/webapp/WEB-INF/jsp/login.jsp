@@ -21,7 +21,8 @@
     <tr>
         <td>验证码:</td>
         <td><input name="idcode" type="text" id="idcode" /></td>
-        <td><input type="button" name="send" value="获取" onclick=sendSMS() /></td>
+        <td><button id="bt01" name="send" onclick="sendSMS();fun()">发送验证码</button></td>
+        <%--<td><input type="button" name="send"  id = "bt01" value="获取" onclick=sendSMS();fun() /></td>--%>
     </tr>
     <tr>
         <td></td>
@@ -32,6 +33,23 @@
 
 <script src="../jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" language="javascript">
+    function fun() {
+        var bt01 = document.getElementById("bt01");
+        bt01.disabled = true;   //当点击后倒计时时候不能点击此按钮
+        var time = 60;   //倒计时5秒
+        var timer = setInterval(fun1, 1000);    //设置定时器
+        function fun1() {
+            time--;
+            if(time>=0) {
+                bt01.innerHTML = time + "s后重新发送";
+            }else{
+                bt01.innerHTML = "重新发送验证码";
+                bt01.disabled = false;    //倒计时结束能够重新点击发送的按钮
+                clearTimeout(timer);    //清除定时器
+                time = 5;   //设置循环重新开始条件
+            }
+        }
+    }
     function sendSMS() {
         var mobile = document.getElementById("mobile").value;
         if(mobile==''){
@@ -83,7 +101,8 @@
             dataType:'json',
             success:function(data){
                 if(data.errcode==0){
-                    alert("登录成功");
+//                    alert("登录成功");
+                    window.open("/index.jsp")
                 }
                 else{
                     alert(data.detail);

@@ -80,19 +80,18 @@ public class Test {
     @RequestMapping(value = "/getcode.do",method = RequestMethod.GET)
     @ResponseBody
     public AjaxResponseMsg Sms(String mobile , HttpServletRequest request) throws ClientException, InterruptedException{
-//        String code = sendSmsService.randomNum();
-//        QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(mobile, code);
+        String code = sendSmsService.randomNum();
+        QuerySendDetailsResponse querySendDetailsResponse = sendSmsService.sendCode(mobile, code);
         AjaxResponseMsg responseMsg = new AjaxResponseMsg();
-//        if (querySendDetailsResponse.getCode().equals("OK")) {
-//            responseMsg.setErrcode(0);
-//            responseMsg.setDetail("60");
-//        } else {
-//            responseMsg.setErrcode(1);
-//        }
+        if (querySendDetailsResponse.getCode().equals("OK")) {
+            responseMsg.setErrcode(0);
+            responseMsg.setDetail("60");
+        } else {
+            responseMsg.setErrcode(1);
+        }
         HttpSession session = request.getSession();
-        session.setMaxInactiveInterval(600);
-        session.setAttribute("code","AAAA");
-        System.out.println("getCode.do"+"AAAA");
+        session.setMaxInactiveInterval(60);
+        session.setAttribute(mobile,code);
         return responseMsg;
     }
 
@@ -101,12 +100,11 @@ public class Test {
     @ResponseBody
     public AjaxResponseMsg validate(String mobile , String idcode , HttpServletRequest request) {
         AjaxResponseMsg responseMsg = new AjaxResponseMsg();
-        String code = (String) request.getSession().getAttribute("code");
-        System.out.println("validate:"+mobile);
-        System.out.println("validate:"+idcode);
-        System.out.println(code.equals(idcode));
-        if (code.equals(idcode)) {
+        String code = (String) request.getSession().getAttribute(mobile);
+
+        if (idcode.equals(code)) {
             responseMsg.setErrcode(0);
+            responseMsg.setDetail("a");
         } else {
             responseMsg.setErrcode(1);
             responseMsg.setDetail("验证码错误");
