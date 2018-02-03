@@ -102,7 +102,7 @@
             success:function(data){
                 if(data.errcode==0){
 //                    alert("登录成功");
-                    window.open("/index.jsp")
+                    window.open("/menu.jsp")
                 }
                 else{
                     alert(data.detail);

@@ -3,9 +3,7 @@ package com.lujunqiu.controller;
 import com.alibaba.fastjson.JSON;
 import com.aliyuncs.dysmsapi.model.v20170525.QuerySendDetailsResponse;
 import com.aliyuncs.exceptions.ClientException;
-import com.lujunqiu.pojo.AjaxResponseMsg;
-import com.lujunqiu.pojo.RedPacket;
-import com.lujunqiu.pojo.UserRedPacket;
+import com.lujunqiu.pojo.*;
 import com.lujunqiu.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -43,6 +41,9 @@ public class Test {
     WeatherService weatherService = null;
 
 
+    /*
+    非ajax基于重定向的短信验证
+     */
     @RequestMapping(value = "hello2", method = RequestMethod.GET)
     public String test() {
         return "getCode";
@@ -112,6 +113,22 @@ public class Test {
         return responseMsg;
     }
 
+    /*
+    天气查询处理方法
+     */
 
+    @RequestMapping(value = "/weather.do",method = RequestMethod.GET)
+    @ResponseBody
+    public Result weather(String city , int days) {
+        Result result = weatherService.getWeatherInfo(city, days);
+        if (result == null) {
+            result = new Result();
+        }
+        return result;
+    }
+
+    /*
+    红包业务处理方法
+     */
 
 }
