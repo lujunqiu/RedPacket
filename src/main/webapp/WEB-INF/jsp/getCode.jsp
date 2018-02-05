@@ -11,7 +11,7 @@
     <title>getCode</title>
 </head>
 <body>
-<form action="/test/message" method="post">
+<form action="/test/message" method="get">
     <input type="text" name="phone"/><button id="bt01">get</button>
 </form>
 </body>

@@ -44,7 +44,6 @@ public class RedisRedPacketServiceImpl implements RedisRedPacketService {
     public void saveUserRedPacketByRedis(int redPacketId, double unitAmount) {
         long start = System.currentTimeMillis();
         //得到操控redis列表的对象,操作的列表的key是"PREFIX + redPacketId"
-        System.out.println(PREFIX + redPacketId);
         BoundListOperations ops = redisTemplate.boundListOps(PREFIX + redPacketId);
 
         long size = ops.size();

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -22,7 +23,9 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by qiu on 18-1-9.
@@ -108,7 +111,11 @@ public class Test {
             responseMsg.setDetail("a");
         } else {
             responseMsg.setErrcode(1);
-            responseMsg.setDetail("验证码错误");
+            if (code == null) {
+                responseMsg.setDetail("验证码失效");
+            } else {
+                responseMsg.setDetail("验证码错误");
+            }
         }
         return responseMsg;
     }
@@ -131,4 +138,53 @@ public class Test {
     红包业务处理方法
      */
 
+    /**
+     * 插入红包业务处理方法
+     * @param userId
+     * @param amount
+     * @param total
+     * @param note
+     * @return
+     */
+    @RequestMapping(value = "/insert.do",method = RequestMethod.GET)
+    public String insertRedPacket(String userId,String amount , String total , String note) {
+        RedPacket redPacket = new RedPacket();
+        redPacket.setNote(note);
+        redPacket.setAmount(Integer.parseInt(amount));
+        redPacket.setTotal(Integer.parseInt(total));
+        redPacket.setUserId(Integer.parseInt(userId));
+        redPacket.setUnitAmount(Integer.parseInt(amount) / Integer.parseInt(total));
+        redPacket.setStock(Integer.parseInt(total));
+        redPacketService.insertRedPacket(redPacket);
+        return "redirect:/test/showRedPacket.do";
+    }
+
+    /**
+     * 显示所有红包信息
+     * @param modelMap
+     * @return
+     */
+    @RequestMapping(value = "/showRedPacket.do")
+    public String showRedPacket(ModelMap modelMap){
+        List<RedPacket> redPackets = redPacketService.getRedPackets();
+        modelMap.addAttribute("redPackets", redPackets);
+        return "showRedPacket";
+    }
+
+    /**
+     * 抢红包业务
+     * @param redPacketId
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/grapRedPacket.do")
+    @ResponseBody
+    public Map<String, Object> grapRedPacketByRedis(int redPacketId, int userId) {
+        Map<String, Object> resultMap = new HashMap<String, Object>();
+        long result = userRedPacketService.grapRedPacketByRedis(redPacketId, userId);
+        boolean flag = result > 0;
+        resultMap.put("result", flag);
+        resultMap.put("message", flag ? "抢红包成功" : "抢红包失败");
+        return resultMap;
+    }
 }
