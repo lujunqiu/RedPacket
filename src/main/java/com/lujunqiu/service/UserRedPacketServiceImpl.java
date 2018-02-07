@@ -36,7 +36,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
             "stock = stock - 1 \n" +
             "redis.call('hset',redPacket,'stock',tostring(stock))\n" +
             "redis.call('rpush',listKey,ARGV[1])\n" +
-            "if stock == 2 then return 2 end \n"+
+            "if stock == 0 then return 2 end \n"+
             "return 1 \n";
     //在redis中可以缓存lua脚本，返回一个32位的SHA1编码，下次直接通过这个SHA1编码调用lua脚本即可
     String sha1 = null;
